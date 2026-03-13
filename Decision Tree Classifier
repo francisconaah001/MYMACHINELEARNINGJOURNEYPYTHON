@@ -6,15 +6,19 @@ import numpy as np
 from google.colab import files
 uploaded = files.upload()
 
+#display data
 import pandas as pd
 import io
 df = pd.read_excel(io.BytesIO(uploaded['Weather Data (4).xlsx']), header = 1)
 print(df)
 
+# check if data is properly uploaded
 df.head()
 
+#check the number of rows and columns in the data
 df.shape
 
+#encode the data to take a numerical format for proper classification
 from sklearn.preprocessing import LabelEncoder
 le = LabelEncoder()
 df = df.apply(le.fit_transform)
@@ -27,26 +31,24 @@ print(x)
 y = df['PlayTennis'].values
 print(y)
 
-#Data division model importation and model training
+#split the data into training and testing set
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.3)
 
+#import the DecisionTreeClassifier
 from sklearn.tree import DecisionTreeClassifier
 classifier = DecisionTreeClassifier(criterion = 'entropy',splitter = 'best')
 classifier.fit(x_train,y_train)
 
-#model testing 
+#make predictions using the imported model
 y_pred =classifier.predict(x_test)
-print(y_pred)
 
-#importation of model performance metrics to the determine the model's predictive performance
+#Evaluate model performance using the performance evaluation metrics
 from sklearn.metrics import accuracy_score
 accuracy_score(y_test,y_pred)
 
-#plotting the outcome of the prediction
+#Visualize the DecisionTreeBuilt
 import matplotlib.pyplot as plt
-from sklearn import tree
+from sklearn import tree  
 fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(4,4), dpi=100)
 tree.plot_tree(classifier)
-
-
